@@ -24,10 +24,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Get user-api file
-        run: curl https://raw.githubusercontent.com/Eeventify/user-service/main/api-user.yaml > api-user.yaml
+        run: curl https://raw.githubusercontent.com/Eeventify/user-service/main/User%20Service/User%20Service/api-user.yaml > api-user.yaml
         
       - name: Get event-api file
-        run: curl https://raw.githubusercontent.com/Eeventify/event-service/main/api-event.yaml > api-event.yaml
+        run: curl https://raw.githubusercontent.com/Eeventify/event-service/main/Event%20Service/api-event.yaml > api-event.yaml
         
       - name: Commit files
         run: |
