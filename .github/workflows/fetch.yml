@@ -41,7 +41,7 @@ jobs:
         id: get_interest-api
         continue-on-error: true
         run: |
-          curl -fo temp2.yaml https://raw.githubusercontent.com/Eeventify/interest-service/main/interest-service/api-interest.yaml
+          curl -fo temp3.yaml https://raw.githubusercontent.com/Eeventify/interest-service/main/interest-service/api-interest.yaml
           mv temp3.yaml api-interest.yaml
         
       - name: Commit files
