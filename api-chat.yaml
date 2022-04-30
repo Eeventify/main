@@ -1,48 +1,51 @@
 openapi: 3.0.1
 info:
-  title: 'Chat-service, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-  version: '1.0'
+  title: User API
+  description: An API used for user authentification
+  version: v1
 paths:
-  /WeatherForecast:
+  '/ChatHistory/Get/{chatroom}':
     get:
       tags:
-        - WeatherForecast
-      operationId: GetWeatherForecast
+        - ChatHistory
+      parameters:
+        - name: chatroom
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Success
           content:
             text/plain:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WeatherForecast'
+                $ref: '#/components/schemas/ChatMessage'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WeatherForecast'
+                $ref: '#/components/schemas/ChatMessage'
             text/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WeatherForecast'
+                $ref: '#/components/schemas/ChatMessage'
 components:
   schemas:
-    WeatherForecast:
+    ChatMessage:
       type: object
       properties:
-        date:
+        id:
+          type: integer
+          format: int32
+        message:
+          type: string
+          nullable: true
+        user:
+          type: string
+          nullable: true
+        chatRoom:
+          type: string
+          nullable: true
+        timestamp:
           type: string
           format: date-time
-        temperatureC:
-          type: integer
-          format: int32
-        temperatureF:
-          type: integer
-          format: int32
-          readOnly: true
-        summary:
-          type: string
           nullable: true
       additionalProperties: false
