@@ -153,15 +153,42 @@ paths:
       parameters:
         - name: latitude
           in: query
+          description: Desired latitude in degrees
           schema:
             type: number
             format: double
         - name: longitude
           in: query
+          description: Desired longitude in degrees
           schema:
             type: number
             format: double
+        - name: radius
+          in: query
+          description: Radius included results in KM
+          schema:
+            type: number
+            format: double
+            default: 20
       responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventDTO'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventDTO'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventDTO'
         '400':
           description: Bad Request
           content:
