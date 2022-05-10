@@ -107,26 +107,11 @@ paths:
     get:
       tags:
         - Event
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: integer
-                format: int32
-          text/json:
-            schema:
-              type: array
-              items:
-                type: integer
-                format: int32
-          application/*+json:
-            schema:
-              type: array
-              items:
-                type: integer
-                format: int32
+      parameters:
+        - name: ids
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: Success
