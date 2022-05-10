@@ -110,6 +110,7 @@ paths:
       parameters:
         - name: ids
           in: query
+          description: 'Ids for the interests example: ?ids=1,2,3'
           schema:
             type: string
       responses:
