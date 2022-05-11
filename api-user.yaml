@@ -526,6 +526,9 @@ components:
         registrationDate:
           type: string
           format: date-time
+        img:
+          type: string
+          nullable: true
         events:
           type: array
           items:
