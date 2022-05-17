@@ -7,14 +7,14 @@
     <title>Eeventify Status</title>
     <link rel="icon" type="image/png" href="dist/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="dist/favicon-16x16.png" sizes="16x16" />
-    
-    <!-- Font Awesome -->
-    <link href="dist/fontawesome/solid.css" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+
     <style>
         html
         {
@@ -31,17 +31,23 @@
         {
             color: red;
         }
+
+        .gray
+        {
+            color: gray;
+        }
       </style>
 </head>
+
 <body>
     <img src="dist/status.jpg" width="400px" />
     <h1>Eeventify Status</h1>
 
     <ul>
-        <li>User service: <i id="user" class="fa-solid fa-hourglass-clock"></i></li>
-        <li>Event service: <i id="event" class="fa-solid fa-hourglass-clock"></i></li>
-        <li>Interest service: <i id="interest" class="fa-solid fa-hourglass-clock"></i></li>
-        <li>Chat service: <i id="chat" class="fa-solid fa-hourglass-clock"></i></li>
+        <li>User service:&nbsp;<span id="user" class="gray">Waiting…</span></li>
+        <li>Event service:&nbsp;<span id="event" class="gray">Waiting…</span></li>
+        <li>Interest service:&nbsp;<span id="interest" class="gray">Waiting…</span></li>
+        <li>Chat service:&nbsp;<span id="chat" class="gray">Waiting…</span></li>
     </ul>
 
     <a href="index.html">Back to index</a>
@@ -49,28 +55,38 @@
     <script>
         let urls =
         [
-            "http://office.pepr.com:25253/ChatHistory/Get/test",
-            "http://office.pepr.com:25252/Event/GetAllEvents",
-            "http://office.pepr.com:25252/Interests",
-            "http://office.pepr.com:25252/Login?email=test@example.com&password=nF7Az53B"
+            "https://api.getpostman.com/monitors/19557167-1eccf794-89ca-42a0-a284-6618db2bc2c7",
+            "https://api.getpostman.com/monitors/19557167-1ecbb85e-c3c9-4300-89b4-4be9cb7607ad",
+            "https://api.getpostman.com/monitors/19557167-1ecb9ae6-bbc1-48a0-a930-9cd750fad9dd",
+            "https://api.getpostman.com/monitors/19557167-1ecbb038-ac62-4460-8113-80309c432b8d"
         ];
 
         let ids = ["chat", "event", "interest", "user"];
 
         function getStatus(url, element) {
-            fetch(url)
+            fetch(url, {
+                headers: {
+                    "X-Api-Key": "PMAK-6283af485ed29b2146244ce6-afa014382f27ed729518ef64b88c6d140a"
+                }
+            })
                 .then(res => {
-                    if (res.status === 200)
+                    return res.json();
+                })
+                .then(json => {
+                    if (json.monitor.lastRun.status === "success")
                     {
-                        element.className = "fa-solid fa-square-check green";
+                        element.className = "green";
+                        element.textContent = "Operational on " + dayjs(json.monitor.lastRun.finishedAt).format('DD/MM/YYYY HH:mm');
                     }
                     else
                     {
-                        element.className = "fa-solid fa-square-xmark red";
+                        element.className = "red";
+                        element.textContent = "Errors found on " + dayjs(json.monitor.lastRun.finishedAt).format('DD/MM/YYYY HH:mm');
                     }
                 })
                 .catch((err) => {
-                    element.className = "fa-solid fa-square-xmark red";
+                    element.className = "red";
+                    element.textContent = "No response";
                     console.error(err);
                 });
         }
