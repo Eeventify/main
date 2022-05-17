@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eeventify Status</title>
+    <link rel="icon" type="image/png" href="dist/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="dist/favicon-16x16.png" sizes="16x16" />
+    
+    <!-- Font Awesome -->
+    <link href="dist/fontawesome/solid.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <style>
+        html
+        {
+            text-align: center;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .green
+        {
+            color: green;
+        }
+
+        .red
+        {
+            color: red;
+        }
+      </style>
+</head>
+<body>
+    <img src="dist/status.jpg" width="400px" />
+    <h1>Eeventify Status</h1>
+
+    <ul>
+        <li>User service: <i id="user" class="fa-solid fa-hourglass-clock"></i></li>
+        <li>Event service: <i id="event" class="fa-solid fa-hourglass-clock"></i></li>
+        <li>Interest service: <i id="interest" class="fa-solid fa-hourglass-clock"></i></li>
+        <li>Chat service: <i id="chat" class="fa-solid fa-hourglass-clock"></i></li>
+    </ul>
+
+    <a href="index.html">Back to index</a>
+
+    <script>
+        let urls =
+        [
+            "http://office.pepr.com:25253/ChatHistory/Get/test",
+            "http://office.pepr.com:25252/Event/GetAllEvents",
+            "http://office.pepr.com:25252/Interests",
+            "http://office.pepr.com:25252/Login?email=test@example.com&password=nF7Az53B"
+        ];
+
+        let ids = ["chat", "event", "interest", "user"];
+
+        function getStatus(url, element) {
+            fetch(url)
+                .then(res => {
+                    if (res.status === 200)
+                    {
+                        element.className = "fa-solid fa-square-check green";
+                    }
+                    else
+                    {
+                        element.className = "fa-solid fa-square-xmark red";
+                    }
+                })
+                .catch((err) => {
+                    element.className = "fa-solid fa-square-xmark red";
+                    console.error(err);
+                });
+        }
+
+        for (let index = 0; index < urls.length; index++) {
+            const url = urls[index];
+            const element = document.getElementById(ids[index]);
+
+            getStatus(url, element);
+        }
+    </script>
+</body>
+</html>
