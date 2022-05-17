@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <style>
         html
@@ -44,10 +45,9 @@
     <h1>Eeventify Status</h1>
 
     <p>
-        Eeventify uses Postman monitors to run tests on each of its services every weekday evening at 21:00 hours.<br>
-        Refreshing this page between these intervals will not yield any new data and might result in the API call limit
-        for Postman being exceeded.<br>
-        Please don't do that. 🥺
+        Curious about the status of Eeventify's services?<br>
+        Is your code not working and wondering who to blame?<br>
+        Check below to see the status of each service!
     </p>
 
     <ul>
@@ -57,52 +57,75 @@
         <li>Chat service:&nbsp;<span id="chat" class="gray">Waiting…</span></li>
     </ul>
 
+    <p style="color: grey; font-size: 0.8rem;">
+        Note: Even if a service shows up as operational above, it is still possible that<br>
+        parts of a service are malfunctioning, as the test only checks for availability.<br>
+        When in doubt, contact the back-end team and they will gladly help you out!
+    </p>
+
     <a href="index.html">Back to index</a>
 
     <script>
         let urls =
         [
-            "https://api.getpostman.com/monitors/19557167-1eccf794-89ca-42a0-a284-6618db2bc2c7",
-            "https://api.getpostman.com/monitors/19557167-1ecbb85e-c3c9-4300-89b4-4be9cb7607ad",
-            "https://api.getpostman.com/monitors/19557167-1ecb9ae6-bbc1-48a0-a930-9cd750fad9dd",
-            "https://api.getpostman.com/monitors/19557167-1ecbb038-ac62-4460-8113-80309c432b8d"
+            "http://office.pepr.com:25253/ChatHistory/Get/test",
+            "http://office.pepr.com:25252/Event/GetAllEvents",
+            "http://office.pepr.com:25252/Interests",
+            "http://office.pepr.com:25252/Login?email=test@example.com&password=nF7Az53B"
         ];
 
         let ids = ["chat", "event", "interest", "user"];
 
-        function getStatus(url, element) {
-            fetch(url, {
+        function pingURL(URL, element) {
+            const settings = {
+            
+                // Defines the configurations
+                // for the request
+                cache: false,
+                dataType: "jsonp",
+                async: true,
+                crossDomain: true,
+                url: URL,
+                method: "GET",
                 headers: {
-                    "X-Api-Key": "PMAK-6283af485ed29b2146244ce6-afa014382f27ed729518ef64b88c6d140a"
-                }
-            })
-                .then(res => {
-                    return res.json();
-                })
-                .then(json => {
-                    if (json.monitor.lastRun.status === "success")
-                    {
+                accept: "application/json",
+                "Access-Control-Allow-Origin": "*",
+                },
+                timeout: 5000,
+            
+                // Defines the response to be made
+                // for certain status codes
+                statusCode: {
+                    200: function (response) {
+                        console.log("Status 200: Page is up!");
                         element.className = "green";
-                        element.textContent = "Operational on " + dayjs(json.monitor.lastRun.finishedAt).format('DD/MM/YYYY HH:mm');
-                    }
-                    else
-                    {
+                        element.textContent = "Operating normally";
+                    },
+                    400: function (response) {
                         element.className = "red";
-                        element.textContent = "Errors found on " + dayjs(json.monitor.lastRun.finishedAt).format('DD/MM/YYYY HH:mm');
-                    }
-                })
-                .catch((err) => {
-                    element.className = "red";
-                    element.textContent = "Error retrieving data";
-                    console.error(err);
-                });
+                        element.textContent = "Service down";
+                    },
+                    0: function (response) {
+                        element.className = "red";
+                        element.textContent = "Service down";
+                    },
+                    404: function (response) {
+                        element.className = "red";
+                        element.textContent = "Service down";
+                    },
+                },
+            };
+            
+            // Sends the request and observes the response
+            jQuery.ajax(settings);
         }
 
         for (let index = 0; index < urls.length; index++) {
             const url = urls[index];
             const element = document.getElementById(ids[index]);
 
-            getStatus(url, element);
+            //getStatus(url, element);
+            pingURL(url, element);
         }
     </script>
 </body>
