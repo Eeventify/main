@@ -40,8 +40,15 @@
 </head>
 
 <body>
-    <img src="dist/status.jpg" width="400px" />
+    <img src="dist/status.png" width="400px" />
     <h1>Eeventify Status</h1>
+
+    <p>
+        Eeventify uses Postman monitors to run tests on each of its services every weekday evening at 21:00 hours.<br>
+        Refreshing this page between these intervals will not yield any new data and might result in the API call limit
+        for Postman being exceeded.<br>
+        Please don't do that. 🥺
+    </p>
 
     <ul>
         <li>User service:&nbsp;<span id="user" class="gray">Waiting…</span></li>
@@ -86,7 +93,7 @@
                 })
                 .catch((err) => {
                     element.className = "red";
-                    element.textContent = "No response";
+                    element.textContent = "Error retrieving data";
                     console.error(err);
                 });
         }
